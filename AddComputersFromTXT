@@ -1,0 +1,2 @@
+$computers = Get-Content -Path C:\temp\computers.txt
+Add-Computer -ComputerName $computers -DomainName "PHIDomain.com" -Restart
