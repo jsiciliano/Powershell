@@ -1,0 +1,59 @@
+#List of Applications to Install
+#Located on G Drive under windows 10 rollout where all users have access.
+#Or located on the web and downloaded and installed to a destination folder.
+
+#Source Software
+$Agents = 'G:\IT SUPPORT\windows 10 rollout\Agents\Agent_Install (2).exe'
+$AntiVirus = 'G:\IT SUPPORT\windows 10 rollout\Anti Virus\My Company_Workstations_WIN64BIT\Symantec Endpoint Protection version 14.3.4615.2000 - English\setup.exe'
+$CJabber = 'G:\IT SUPPORT\windows 10 rollout\Cisco Jabber Installer\CiscoJabberSetup.msi'
+$AdobeURL ='https://get.adobe.com/reader/download?os=Windows+10&name=Reader+DC+2022.001.20169+English+for+Windows&lang=en&nativeOs=Windows+10&accepted=mss%2Cmsc&declined=&preInstalled=&site=otherversions'
+$MicrosoftTeamsURL = 'https://go.microsoft.com/fwlink/p/?LinkID=2187327&clcid=0x409&culture=en-us&country=US'
+$VPN = 'G:\IT SUPPORT\windows 10 rollout\Firewall - VPN Client\Windows\NetExtender-10.2.315.msi'
+
+#Destination File for Installs from the internet
+#Teams and Adobe only
+$destAdobeReader = 'C:\temp\adobepdf.exe'
+$destMicrosoftTeams = 'C:\temp\teams.msi' 
+
+#Laptop or Desktop Variables
+$userInputWorkstationType = ''
+$Desktop = $false;
+$Laptop = $false;
+$userInputPrinter = ''
+
+#Create an array of printers from servervm02
+$listofPrinters =@()
+
+
+#Desktop or laptop install
+$userInputWorkstationType = Read-Host -Prompt 'Are you installing for a Laptop or Desktop Workstation?'
+if ($userInputWorkstationType -eq 'laptop' -or 'Laptop') {
+  $Laptop = $true;
+  $Desktop = $true;
+  
+} elseif ($userInputWorkstationType -eq 'desktop' -or 'Desktop') {
+    $Desktop = $true;
+}
+
+#Connect to a printer on servervm02
+$userInputPrinter = Read-Host -Prompt 'Which printer do you want to connect to?"'
+
+#make a case switch for connecting to each printer.
+
+#set printer to default printer
+
+
+
+#check user input to verify if doing a laptop install or desktop install
+if ($Desktop -eq 'true' -and $Laptop -eq $true) {
+
+   ## Start-Process $Agents
+   ## Start-Process $VPN 
+
+   #Download Teams and Adobe files
+   Invoke-WebRequest -URI $MicrosoftTeamsURL -OutFile $destMicrosoftTeams
+   Invoke-WebRequest -URI $AdobeURL -OutFile $destAdobeReader
+    
+} elseif ($Desktop -eq $true) {
+    Write-Host "Desktop Install"
+}
