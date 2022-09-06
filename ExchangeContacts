@@ -1,0 +1,27 @@
+#connected to exchange
+Connect-ExchangeOnline
+
+#Use these two lines for a single contact
+New-MailContact -Name "Test Conctact" -ExternalEmailAddress "alphytest@gmail.com"
+
+Add-DistributionGroupMember -Identity "Team Members" -Member "alphytest@gmail.com"
+
+
+#Use the foreach loop below for multiple contacts
+#CSV must be comma delimeter
+#Third column  (where data actually comes from is =CONCATENATE(A:A , "," , B:B) where Column A:A is Name and Column B:B is ExternalEmailAddress
+#Column header(s) need to be Name & ExternalEmailAddress
+$Users = Import-Csv -Delimiter "," -Path "C:\temp\team_emails.csv"
+
+foreach ($Users in $Users) {
+
+    $ContactName = $Users.Name
+    $ExternalEmailAddress = $Users.ExternalEmailAddress
+
+    New-MailContact -Name $ContactName -ExternalEmailAddress $ExternalEmailAddress
+
+    #Remove this line if you do not want to add the contact to a distribution group
+    #change Team Members to name of the distriubtion group
+    Add-DistributionGroupMember -Identity "Team Members" -Member $ExternalEmailAddress
+    
+}
