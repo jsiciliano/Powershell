@@ -1,0 +1,24 @@
+#Import-csv and New-ADUser issue
+
+
+
+
+$Users = Import-Csv -Path "C:\Userlist-sn.csv"            
+foreach ($User in $Users)            {            
+    $Displayname = $User.Firstname + " " + $User.Lastname            
+    $UserFirstname = $User.Firstname            
+    $UserLastname = $User.Lastname            
+    $OU = "$User.OU"            
+    $SAM = $User.SAM            
+    $UPN = $User.Firstname + "." + $User.Lastname + "@" + $User.Maildomain            
+    $Description = $User.Description            
+    $Password = $User.Password            
+    New-ADUser -Name "$Displayname" -DisplayName "$Displayname" -SamAccountName $SAM -UserPrincipalName $UPN -GivenName "$UserFirstname" -Surname "$UserLastname" -Description "$Description" -AccountPassword (ConvertTo-SecureString $Password -AsPlainText -Force) -Enabled $true -Path "$OU" -ChangePasswordAtLogon $false –PasswordNeverExpires $true -server domain.loc            
+}
+
+#CSV File Format
+#Firstname | Lastname | Maildomain | SAM | OU | Password | Description
+
+#User | Test01 | contoso.com | utest01 | OU=Standard Users,OU=Users,DC=domain,DC=loc | P@ssw0rd| Test User
+
+#'|' is replaced with ','
